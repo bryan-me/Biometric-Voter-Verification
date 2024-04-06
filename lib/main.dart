@@ -35,32 +35,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  
-
+  int selectedIndex = 0; // Declare selectedIndex here
 
   @override
   Widget build(BuildContext context) {
-    var selectedIndex = 0;
     var colorScheme = Theme.of(context).colorScheme;
 
-    Widget page;
+    // Define page variable
+     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = const barcode();
+        page = const barcode(); 
         break;
       case 1:
         page = const LoginPage(title: 'Fingerprint Verification');
         break;
       case 2:
-        page = const Camera();
+        page = const Camera(); 
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
-    // The container for the current page, with its background color
-    // and subtle switching animation.
+
     var mainArea = ColoredBox(
       color: colorScheme.surfaceVariant,
       child: AnimatedSwitcher(
@@ -72,65 +69,59 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth < 450) {
-            // Use a more mobile-friendly layout with BottomNavigationBar
-            // on narrow screens.
+          if (constraints.maxWidth < 550) {
             return Column(
               children: [
                 Expanded(child: mainArea),
-                //SafeArea(
-                   BottomNavigationBar(
-                    items: const [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.barcode_reader),
-                        label: 'Barcode Scanner',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.fingerprint),
-                        label: 'Fingerprint',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.face),
-                        label: 'Facial Recognition',
-                      ),
-                    ],
-                    currentIndex: selectedIndex,
-                    onTap: (value) {
-                      setState(() {
-                        selectedIndex = value;
-                      });
-                    },
-                  ),
-                //)
+                BottomNavigationBar(
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.barcode_reader),
+                      label: 'Barcode Scanner',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.fingerprint),
+                      label: 'Fingerprint Verification',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.face),
+                      label: 'Facial Verification',
+                    ),
+                  ],
+                  currentIndex: selectedIndex,
+                  onTap: (value) {
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
+                ),
               ],
             );
           } else {
             return Row(
               children: [
-                SafeArea(
-                  child: NavigationRail(
-                    extended: constraints.maxWidth >= 600,
-                    destinations: const [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.barcode_reader),
-                        label: Text('Barcode Scanner'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.fingerprint),
-                        label: Text('Fingerprint'),
-                      ),
-                       NavigationRailDestination(
-                        icon: Icon(Icons.face),
-                        label: Text('Facial Recognition'),
-                      ),
-                    ],
-                    selectedIndex: selectedIndex,
-                    onDestinationSelected: (value) {
-                      setState(() {
-                        selectedIndex = value;
-                      });
-                    },
-                  ),
+                NavigationRail(
+                  extended: constraints.maxWidth >= 600,
+                  destinations: const [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.barcode_reader),
+                      label: Text('Barcode Scanner'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.fingerprint),
+                      label: Text('Fingerprint Verification'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.face),
+                      label: Text('Facial Verification'),
+                    ),
+                  ],
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (value) {
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
                 ),
                 Expanded(child: mainArea),
               ],
@@ -140,7 +131,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-
-
 }
+

@@ -1,6 +1,8 @@
 
 // ignore_for_file: unused_local_variable
 
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:local_auth/local_auth.dart';
 
 class AuthService {
@@ -61,12 +63,52 @@ try {
           stickyAuth: true,
         ),
       );
+      if (isAuthenticated) {
+      String? userData = await _readUserDataFromSDCard();
+      if (userData != null) {
+        // Handle user data (e.g., show in a dedicated screen)
+        print('User data: $userData');
+        // ... (show user data in UI)
+      } else {
+        print('User data not found on SD card');
+      }
+    } else {
+      print('Authentication failed');
+    }
     } catch (e) {
       print("error using biometric auth: $e");
     }
 }
-    
-
     return isAuthenticated;
   }
 }
+
+ Future<String?> _readUserDataFromSDCard() async {
+    try {
+      // Get the external storage directory
+      Directory? externalDir = await getExternalStorageDirectory();
+
+      if (externalDir != null) {
+        // Construct the path to the file on the SD card
+        String filePath = '${externalDir.path}/userdata.txt';
+
+        // Read data from the file
+        File file = File(filePath);
+        if (await file.exists()) {
+          String contents = await file.readAsString();
+          // Return the user data read from the file
+          return contents;
+        } else {
+          print('File does not exist');
+          return null;
+        }
+      } else {
+        print('External storage directory not available');
+        return null;
+      }
+    } catch (e) {
+      // Handle error
+      print('Error: $e');
+      return null;
+    }
+  }
